@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "firstName": "Mike",
+    "lastname": "Vazovskiy",
+    "skills": ["java", "php", "git"]
+  },
+  {
+    "id": 2,
+    "firstName": "Olivia",
+    "lastname": "Gordons",
+    "skills": ["sql"]
+  },
+  {
+    "id": 4,
+    "firstName": "James",
+    "lastname": "Rudokov",
+    "skills": ["C++"]
+  },
+  {
+    "id": 8,
+    "firstName": "Liza",
+    "lastname": "Crowells",
+    "skills": ["microsoftExcel", "git"]
+  }
+]
