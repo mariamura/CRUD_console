@@ -7,25 +7,29 @@ import java.util.List;
 
 public class SkillRepository {
 
-    private final String file_name = "C:\\MariamM\\crud_console\\src\\resources\\skills.json";
+    public static String file_name = "C:\\MariamM\\console_demo_crud\\src\\main\\resources\\skills.json";
 
-    public Skill getById(long id){
-        return new Skill();
+    public Skill getById(long id) {
+        
+        return new Skill(1, "noname");
     }
 
-    public List<Skill> getAll(){
+    public List<Skill> getAll() {
+
         return new ArrayList<>();
     }
 
     public Skill save(Skill skill) {
-        return new Skill();
+
+        return new Skill(1, "noname");
     }
 
-    public Skill update(Skill skill){
-        return new Skill();
+    public Skill update(Skill skill) {
+
+        return new Skill(1, "noname");
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
 
     }
 }

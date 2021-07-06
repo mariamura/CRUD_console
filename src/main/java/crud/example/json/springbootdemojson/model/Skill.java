@@ -5,6 +5,9 @@ public class Skill {
     private long id;
     private String name;
 
+    public Skill(long id, String name) {
+    }
+
     public long getId(){
         return id;
     }
