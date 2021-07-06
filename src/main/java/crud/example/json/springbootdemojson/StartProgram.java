@@ -14,6 +14,7 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class StartProgram {
 	public static void main(String[] args) throws IOException {
+
 		Skill s = new Skill(1, "java");
 		Skill s1 = new Skill(2, "php");
 		Skill s2 = new Skill(3, "sql");
@@ -27,15 +28,6 @@ public class StartProgram {
 		fw.write(in);
 		fw.close();
 
-		String file_content = "";
-		FileReader fr = new FileReader(SkillRepository.file_name);
-		while(fr.ready()) {
-			file_content = file_content + (char)fr.read();
-		}
-
-		SkillRepository skillRepository = new SkillRepository();
-
-		System.out.println();
 
 	}
 }
