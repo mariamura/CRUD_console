@@ -6,6 +6,8 @@ public class Skill {
     private String name;
 
     public Skill(long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public long getId(){
