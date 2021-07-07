@@ -4,6 +4,8 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import crud.example.json.springbootdemojson.model.Skill;
+
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,81 +15,51 @@ import java.util.stream.Stream;
 
 public class SkillRepository {
 
-    public static String file_name = "C:\\MariamM\\console_demo_crud\\src\\main\\resources\\skills.json";
+    public static String fileName = "console_demo_crud\\src\\main\\resources\\skills.json";
 
-    public Skill getById(long id) throws IOException {
-
-        
-        String file_content = "";
-        FileReader fr = new FileReader(SkillRepository.file_name);
-        while(fr.ready()) {
-            file_content += (char)fr.read();
-        }
-
+    public Skill getById(Long id) {
 
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        ArrayList<Skill> targetCollection = new Gson().fromJson(file_content, targetClassType);
+        List<Skill> targetCollection = new Gson().fromJson(getPath(fileName), targetClassType);
 
         return targetCollection
                 .stream()
                 .filter(n -> n.getId()==id)
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 
-    public List<Skill> getAll() throws IOException {
-
-        String file_content = "";
-        FileReader fr = new FileReader(SkillRepository.file_name);
-        while(fr.ready()) {
-            file_content += (char)fr.read();
-        }
-
+    public List<Skill> getAll() {
 
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        return new Gson().<ArrayList<Skill>>fromJson(file_content, targetClassType);
+        return new Gson().<ArrayList<Skill>>fromJson(readFile(), targetClassType);
     }
 
-    public Skill save(Skill skill) throws IOException {
-
-        String file_content = "";
-        FileReader fr = new FileReader(SkillRepository.file_name);
-        while(fr.ready()) {
-            file_content += (char)fr.read();
-        }
-
+    public Skill save(Skill skill) {
 
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        ArrayList<Skill> targetCollection = new Gson().fromJson(file_content, targetClassType);
-
+        List<Skill> targetCollection = new Gson().fromJson(getPath(fileName), targetClassType);
 
         Skill maxById = targetCollection
                 .stream()
                 .max(Comparator.comparing(Skill::getId))
-                .orElseThrow(NoSuchElementException::new);
-        long maxId = maxById.getId();
+                .orElse(null);
+
+        long maxId = Objects.nonNull(maxById) ?maxById.getId() : 0L;
         skill.setId(maxId+1);
         return skill;
     }
 
-    public Skill update(Skill skill) throws IOException {
+    public Skill update(Skill skill) {
         Skill skill_new = new Skill(skill.getId(), skill.getName());
         deleteById(skill.getId());
         save(skill_new);
         return skill_new;
     }
 
-    public void deleteById(Long id) throws IOException {
-
-        String file_content = "";
-        FileReader fr = new FileReader(SkillRepository.file_name);
-        while(fr.ready()) {
-            file_content += (char)fr.read();
-        }
-        fr.close();
-
+    private void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        ArrayList<Skill> targetCollection = new Gson().fromJson(file_content, targetClassType);
+        List<Skill> targetCollection = new Gson().fromJson(getPath(fileName), targetClassType);
 
 
         for(Skill skill: targetCollection) {
@@ -97,8 +69,31 @@ public class SkillRepository {
             }
         }
         String in = new Gson().toJson(targetCollection);
-        FileWriter fw = new FileWriter(file_name);
-        fw.write(in);
-        fw.close();
+        writeToFile(in);
+    }
+
+    private String readFile() {
+        String fileContent = "";
+        try(FileReader fr = new FileReader(getPath(fileName))){
+            while(fr.ready()) {
+                fileContent += (char)fr.read();
+            }
+        }catch (IOException e) {
+            System.out.println("Error while file reading: " + e);
+        }
+        return fileContent;
+    }
+
+    private void writeToFile(String in) {
+        try(FileWriter fw = new FileWriter(fileName)) {
+            fw.write(in);
+        }catch (IOException e) {
+            System.out.println("Error while writing to the file: " + e);
+        }
+    }
+
+    private String getPath(String filename) {
+        File f = new File(filename);
+        return f.getPath();
     }
 }
