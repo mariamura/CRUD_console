@@ -10,7 +10,7 @@ public class Skill {
         this.name = name;
     }
 
-    public long getId(){
+    public Long getId(){
         return id;
     }
 

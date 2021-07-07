@@ -2,7 +2,6 @@ package crud.example.json.springbootdemojson.repository;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import crud.example.json.springbootdemojson.model.Skill;
 
 import java.io.File;
@@ -11,59 +10,54 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class SkillRepository {
 
-    public static String fileName = "console_demo_crud\\src\\main\\resources\\skills.json";
+    public static final String fileName = "skills.json";
 
     public Skill getById(Long id) {
-
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(getPath(fileName), targetClassType);
-
+        List<Skill> targetCollection = new Gson().fromJson(readFile(), targetClassType);
         return targetCollection
                 .stream()
-                .filter(n -> n.getId()==id)
+                .filter(n -> n.getId().equals(id))
                 .findFirst().orElse(null);
     }
 
     public List<Skill> getAll() {
-
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
         return new Gson().<ArrayList<Skill>>fromJson(readFile(), targetClassType);
     }
 
-    public Skill save(Skill skill) {
-
+    private Skill save(Skill skill) {
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(getPath(fileName), targetClassType);
+        List<Skill> targetCollection = new Gson().fromJson(readFile(), targetClassType);
 
         Skill maxById = targetCollection
                 .stream()
                 .max(Comparator.comparing(Skill::getId))
                 .orElse(null);
 
-        long maxId = Objects.nonNull(maxById) ?maxById.getId() : 0L;
+        Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         skill.setId(maxId+1);
+        System.out.println(skill.getId());
         return skill;
     }
 
     public Skill update(Skill skill) {
-        Skill skill_new = new Skill(skill.getId(), skill.getName());
+        Skill skillNew = new Skill(skill.getId(), skill.getName());
         deleteById(skill.getId());
-        save(skill_new);
-        return skill_new;
+        save(skillNew);
+        return skillNew;
     }
 
     private void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(getPath(fileName), targetClassType);
-
+        List<Skill> targetCollection = new Gson().fromJson(readFile(), targetClassType);
 
         for(Skill skill: targetCollection) {
-            if(skill.getId()==id){
+            if(skill.getId().equals(id)){
                 targetCollection.remove(skill);
                 break;
             }
@@ -74,7 +68,7 @@ public class SkillRepository {
 
     private String readFile() {
         String fileContent = "";
-        try(FileReader fr = new FileReader(getPath(fileName))){
+        try(FileReader fr = new FileReader(getPath())){
             while(fr.ready()) {
                 fileContent += (char)fr.read();
             }
@@ -92,8 +86,8 @@ public class SkillRepository {
         }
     }
 
-    private String getPath(String filename) {
-        File f = new File(filename);
-        return f.getPath();
+    private String getPath() {
+        File f = new File(SkillRepository.fileName);
+        return f.getAbsolutePath();
     }
 }
