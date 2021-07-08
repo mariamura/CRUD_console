@@ -40,7 +40,6 @@ public class SkillRepository {
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         skill.setId(maxId+1);
-        System.out.println(skill.getId());
         return skill;
     }
 
@@ -79,15 +78,16 @@ public class SkillRepository {
     }
 
     private void writeToFile(String in) {
-        try(FileWriter fw = new FileWriter(fileName)) {
+        try(FileWriter fw = new FileWriter(SkillRepository.fileName)) {
             fw.write(in);
         }catch (IOException e) {
             System.out.println("Error while writing to the file: " + e);
         }
     }
 
-    private String getPath() {
-        File f = new File(SkillRepository.fileName);
+    public static String getPath() {
+        String path = "src\\main\\resources\\";
+        File f = new File(path + "\\" + SkillRepository.fileName);
         return f.getAbsolutePath();
     }
 }
