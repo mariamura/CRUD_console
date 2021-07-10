@@ -15,11 +15,11 @@ import java.util.Objects;
 
 public class TeamRepository {
 
-    private static final String fileName = "teams.json";
+    public static final String fileName = "teams.json";
 
     public Team getById(Long id) {
         Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -28,12 +28,12 @@ public class TeamRepository {
 
     public List<Team> getAll() {
         Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        return new Gson().<ArrayList<Team>>fromJson(readFile(), targetClassType);
+        return new Gson().<ArrayList<Team>>fromJson(FileUtils.readFile(fileName), targetClassType);
     }
 
-    private Team save(Team team) {
+    public Team save(Team team) {
         Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         Team maxById = targetCollection
                 .stream()
@@ -42,6 +42,7 @@ public class TeamRepository {
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         team.setId(maxId+1);
+        //FileUtils.writeToFile(new Gson().toJson(team), fileName);
         return team;
     }
 
@@ -56,10 +57,10 @@ public class TeamRepository {
         return teamNew;
     }
 
-    private void deleteById(Long id)  {
+    public void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         for(Team team: targetCollection) {
             if(team.getId().equals(id)){
@@ -68,32 +69,6 @@ public class TeamRepository {
             }
         }
         String in = new Gson().toJson(targetCollection);
-        writeToFile(in);
-    }
-
-    private String readFile() {
-        String fileContent = "";
-        try(FileReader fr = new FileReader(getPath())){
-            while(fr.ready()) {
-                fileContent += (char)fr.read();
-            }
-        }catch (IOException e) {
-            System.out.println("Error while file reading: " + e);
-        }
-        return fileContent;
-    }
-
-    private void writeToFile(String in) {
-        try(FileWriter fw = new FileWriter(TeamRepository.fileName)) {
-            fw.write(in);
-        }catch (IOException e) {
-            System.out.println("Error while writing to the file: " + e);
-        }
-    }
-
-    public static String getPath() {
-        String path = "src\\main\\resources\\";
-        File f = new File(path + "\\" + TeamRepository.fileName);
-        return f.getAbsolutePath();
+        FileUtils.writeToFile(in, fileName);
     }
 }

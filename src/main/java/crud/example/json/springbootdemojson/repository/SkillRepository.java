@@ -17,7 +17,7 @@ public class SkillRepository {
 
     public Skill getById(Long id) {
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -26,12 +26,12 @@ public class SkillRepository {
 
     public List<Skill> getAll() {
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        return new Gson().<ArrayList<Skill>>fromJson(readFile(), targetClassType);
+        return new Gson().<ArrayList<Skill>>fromJson(FileUtils.readFile(fileName), targetClassType);
     }
 
-    private Skill save(Skill skill) {
+    public Skill save(Skill skill) {
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         Skill maxById = targetCollection
                 .stream()
@@ -50,10 +50,10 @@ public class SkillRepository {
         return skillNew;
     }
 
-    private void deleteById(Long id)  {
+    public void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         for(Skill skill: targetCollection) {
             if(skill.getId().equals(id)){
@@ -62,32 +62,6 @@ public class SkillRepository {
             }
         }
         String in = new Gson().toJson(targetCollection);
-        writeToFile(in);
-    }
-
-    private String readFile() {
-        String fileContent = "";
-        try(FileReader fr = new FileReader(getPath())){
-            while(fr.ready()) {
-                fileContent += (char)fr.read();
-            }
-        }catch (IOException e) {
-            System.out.println("Error while file reading: " + e);
-        }
-        return fileContent;
-    }
-
-    private void writeToFile(String in) {
-        try(FileWriter fw = new FileWriter(SkillRepository.fileName)) {
-            fw.write(in);
-        }catch (IOException e) {
-            System.out.println("Error while writing to the file: " + e);
-        }
-    }
-
-    public static String getPath() {
-        String path = "src\\main\\resources\\";
-        File f = new File(path + "\\" + SkillRepository.fileName);
-        return f.getAbsolutePath();
+        FileUtils.writeToFile(in, fileName);
     }
 }

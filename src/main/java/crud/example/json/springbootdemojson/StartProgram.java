@@ -5,8 +5,10 @@ import crud.example.json.springbootdemojson.model.Developer;
 import crud.example.json.springbootdemojson.model.Skill;
 import crud.example.json.springbootdemojson.model.Team;
 import crud.example.json.springbootdemojson.repository.DeveloperRepository;
+import crud.example.json.springbootdemojson.repository.FileUtils;
 import crud.example.json.springbootdemojson.repository.SkillRepository;
 import crud.example.json.springbootdemojson.repository.TeamRepository;
+import crud.example.json.springbootdemojson.view.ConsoleStarter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.FileWriter;
@@ -15,9 +17,9 @@ import java.util.ArrayList;
 
 @SpringBootApplication
 public class StartProgram {
-	public static void main(String[] args) throws IOException {
-
-		Skill s = new Skill(1L, "java");
+	public static void main(String[] args) throws Exception {
+		ConsoleStarter.start();
+		/*Skill s = new Skill(1L, "java");
 		Skill s1 = new Skill(2L, "php");
 		Skill s2 = new Skill(3L, "sql");
 		Skill s3 = new Skill(4L, "js");
@@ -29,7 +31,7 @@ public class StartProgram {
 		ls.add(s3);
 
 		String in = new Gson().toJson(ls);
-		FileWriter fw = new FileWriter(SkillRepository.getPath());
+		FileWriter fw = new FileWriter(FileUtils.getPath(SkillRepository.fileName));
 		fw.write(in);
 
 		ArrayList<Skill> mishaL = new ArrayList<>();
@@ -48,7 +50,7 @@ public class StartProgram {
 		developers.add(nina);
 
 		String developerJson = new Gson().toJson(developers);
-		FileWriter fw2 = new FileWriter(DeveloperRepository.getPath());
+		FileWriter fw2 = new FileWriter(FileUtils.getPath(DeveloperRepository.fileName));
 		fw2.write(developerJson);
 
 
@@ -58,14 +60,12 @@ public class StartProgram {
 		teamList.add(wings);
 
 		String teamsJson = new Gson().toJson(teamList);
-		FileWriter fw3 = new FileWriter(TeamRepository.getPath());
+		FileWriter fw3 = new FileWriter(FileUtils.getPath(TeamRepository.fileName));
 		fw3.write(teamsJson);
 
 
 		fw.close();
 		fw2.close();
-		fw3.close();
-
-
+		fw3.close();*/
 	}
 }

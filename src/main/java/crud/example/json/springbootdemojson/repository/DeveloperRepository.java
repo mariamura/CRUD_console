@@ -20,7 +20,7 @@ public class DeveloperRepository {
 
     public Developer getById(Long id) {
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        List<Developer> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -29,12 +29,12 @@ public class DeveloperRepository {
 
     public List<Developer> getAll() {
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        return new Gson().<ArrayList<Developer>>fromJson(readFile(), targetClassType);
+        return new Gson().<ArrayList<Developer>>fromJson(FileUtils.readFile(fileName), targetClassType);
     }
 
     private Developer save(Developer developer) {
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        List<Developer> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         Developer maxById = targetCollection
                 .stream()
@@ -61,7 +61,7 @@ public class DeveloperRepository {
     private void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        List<Developer> targetCollection = new Gson().fromJson(readFile(), targetClassType);
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         for(Developer developer: targetCollection) {
             if(developer.getId().equals(id)){
@@ -70,32 +70,7 @@ public class DeveloperRepository {
             }
         }
         String in = new Gson().toJson(targetCollection);
-        writeToFile(in);
+        FileUtils.writeToFile(in, fileName);
     }
 
-    private String readFile() {
-        String fileContent = "";
-        try(FileReader fr = new FileReader(getPath())){
-            while(fr.ready()) {
-                fileContent += (char)fr.read();
-            }
-        }catch (IOException e) {
-            System.out.println("Error while file reading: " + e);
-        }
-        return fileContent;
-    }
-
-    private void writeToFile(String in) {
-        try(FileWriter fw = new FileWriter(DeveloperRepository.fileName)) {
-            fw.write(in);
-        }catch (IOException e) {
-            System.out.println("Error while writing to the file: " + e);
-        }
-    }
-
-    public static String getPath() {
-        String path = "src\\main\\resources\\";
-        File f = new File(path + "\\" + DeveloperRepository.fileName);
-        return f.getAbsolutePath();
-    }
 }
