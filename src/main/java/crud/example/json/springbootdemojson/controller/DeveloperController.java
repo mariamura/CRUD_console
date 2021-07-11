@@ -1,29 +1,32 @@
 package crud.example.json.springbootdemojson.controller;
 
 import crud.example.json.springbootdemojson.model.Developer;
+import crud.example.json.springbootdemojson.repository.DeveloperRepository;
+import crud.example.json.springbootdemojson.view.DeveloperView;
 
 import java.util.List;
 
 public class DeveloperController {
-    DeveloperController developerController = new DeveloperController();
+
+    DeveloperRepository developerRepository = new DeveloperRepository();
 
     public List<Developer> getAll(){
-        return developerController.getAll();
+        return developerRepository.getAll();
     }
 
     public Developer getById(Long id){
-        return developerController.getById(id);
+        return developerRepository.getById(id);
     }
 
     public void save(Developer developer){
-        developerController.save(developer);
+        developerRepository.save(developer);
     }
 
     public void update(Developer developer){
-        developerController.update(developer);
+        developerRepository.update(developer);
     }
 
     public void deleteById(Long id){
-        developerController.deleteById(id);
+        developerRepository.deleteById(id);
     }
 }

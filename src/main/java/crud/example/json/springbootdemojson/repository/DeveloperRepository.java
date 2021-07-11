@@ -32,7 +32,7 @@ public class DeveloperRepository {
         return new Gson().<ArrayList<Developer>>fromJson(FileUtils.readFile(fileName), targetClassType);
     }
 
-    private Developer save(Developer developer) {
+    public Developer save(Developer developer) {
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
         List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
@@ -58,7 +58,7 @@ public class DeveloperRepository {
         return developerNew;
     }
 
-    private void deleteById(Long id)  {
+    public void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
         List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);

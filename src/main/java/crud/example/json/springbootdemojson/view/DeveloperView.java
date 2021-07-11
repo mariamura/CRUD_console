@@ -58,11 +58,9 @@ public class DeveloperView {
         String first = sc.nextLine();
         System.out.println("Dev lastName:");
         String last = sc.nextLine();
-        System.out.println("Dev id:");
-        Long id = sc.nextLong();
         List<Skill> newDs = new ArrayList<>();
         try{
-            Developer newDev = new Developer(id, first, last, newDs);
+            Developer newDev = new Developer(1L, first, last, newDs);
             developerController.save(newDev);
         }catch (Exception e){
             System.out.println("Error during new dev creation: " + e);

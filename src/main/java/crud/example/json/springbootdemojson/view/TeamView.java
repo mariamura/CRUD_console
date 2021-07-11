@@ -55,12 +55,11 @@ public class TeamView {
     public static void save() {
         System.out.println("Team name:");
         String teamName = sc.nextLine();
-        System.out.println("Team id:");
-        Long id = sc.nextLong();
         List<Developer> newDs = new ArrayList<>();
         try{
-            Team newTeam = new Team(id, teamName, newDs);
+            Team newTeam = new Team(1L, teamName, newDs);
             teamController.save(newTeam);
+
         }catch (Exception e){
             System.out.println("Error during new team creation: " + e);
         }
@@ -69,8 +68,13 @@ public class TeamView {
     public static void update() {
         System.out.println("Team id:");
         Long id = sc.nextLong();
+        System.out.println("Team name:");
+        String teamName = sc.nextLine();
+
+
+
         try{
-            teamController.deleteById(id);
+            //
         }catch (Exception e) {
             System.out.println("Error while Team delete");
         }
@@ -81,6 +85,7 @@ public class TeamView {
         Long id = sc.nextLong();
         try{
             teamController.deleteById(id);
+            System.out.println("Team with id: " + id + " was deleted." );
         }catch (Exception e) {
             System.out.println("Error while Team delete");
         }
@@ -90,11 +95,10 @@ public class TeamView {
         System.out.println("Team id:");
         Long id = sc.nextLong();
         try{
-            teamController.getById(id);
+            System.out.println(teamController.getById(id).toString());
         }catch (Exception e) {
             System.out.println("Error while Team read");
         }
     }
-
 
 }
