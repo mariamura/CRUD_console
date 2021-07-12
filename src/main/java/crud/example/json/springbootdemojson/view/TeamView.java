@@ -123,7 +123,8 @@ public class TeamView {
             }
             Team newTeam = new Team(1L, teamName, newDs, teamStatus);
             teamController.save(newTeam);
-            System.out.println("New team " + teamName + "with id: " + newTeam.getId() + " was created" );
+            System.out.println("New team " + teamName + "with id : " + newTeam.getId() + " was created" );
+            startTeam();
         }catch (Exception e){
             System.out.println("Error during new team creation: " + e);
         }
@@ -164,7 +165,7 @@ public class TeamView {
                     }
                 }
                 case "3" -> {
-                    System.out.println("Team status\n:" +
+                    System.out.println("Team status:\n" +
                             "1. ACTIVE\n" +
                             "2. DELETED\n");
                     String answer = sc.next();
@@ -177,6 +178,7 @@ public class TeamView {
                 default -> throw new Exception("Incorrect input!");
             }
             System.out.println("Team with id: " + id + " was updated.");
+            startTeam();
         }catch (Exception e) {
             System.out.println("Error while Team update: " + e);
         }
@@ -189,6 +191,7 @@ public class TeamView {
             Long id = sc.nextLong();
             teamController.deleteById(id);
             System.out.println("Team with id: " + id + " was deleted.");
+            startTeam();
         }catch (Exception e) {
             System.out.println("Error while Team delete: " + e);
         }
@@ -199,6 +202,7 @@ public class TeamView {
         try{
             Long id = sc.nextLong();
             System.out.println(teamController.getById(id).toString());
+            startTeam();
         }catch (Exception e) {
             System.out.println("Error while Team read: " + e);
         }
