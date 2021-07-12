@@ -3,6 +3,7 @@ package crud.example.json.springbootdemojson.repository;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Skill;
+import crud.example.json.springbootdemojson.model.Team;
 
 import java.io.File;
 import java.io.FileReader;
@@ -10,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class SkillRepository {
 
@@ -33,15 +35,16 @@ public class SkillRepository {
         Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
         List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
-        Skill maxById = targetCollection
-                .stream()
+        Skill maxById = collectionToStream(targetCollection)
                 .max(Comparator.comparing(Skill::getId))
                 .orElse(null);
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         skill.setId(maxId+1);
-        targetCollection.add(skill);
-        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
+
+        List<Skill> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));
+        newTargetCollections.add(skill);
+        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
         return skill;
     }
 
@@ -65,5 +68,11 @@ public class SkillRepository {
         }
         String in = new Gson().toJson(targetCollection);
         FileUtils.writeToFile(in, fileName);
+    }
+
+    public Stream<Skill> collectionToStream(List<Skill> collection) {
+        return Optional.ofNullable(collection)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty);
     }
 }

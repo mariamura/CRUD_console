@@ -183,7 +183,7 @@ public class DeveloperView {
         System.out.println("Developer id:");
         try{
             Long id = sc.nextLong();
-            developerController.getById(id);
+            System.out.println(developerController.getById(id));
         }catch (Exception e) {
             System.out.println("Error while developer read: " + e);
         }

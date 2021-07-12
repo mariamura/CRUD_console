@@ -3,16 +3,15 @@ package crud.example.json.springbootdemojson.repository;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Developer;
+import crud.example.json.springbootdemojson.model.Skill;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class DeveloperRepository {
 
@@ -36,15 +35,16 @@ public class DeveloperRepository {
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
         List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
-        Developer maxById = targetCollection
-                .stream()
+        Developer maxById = collectionToStream(targetCollection)
                 .max(Comparator.comparing(Developer::getId))
                 .orElse(null);
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         developer.setId(maxId+1);
-        targetCollection.add(developer);
-        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
+
+        List<Developer> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));;
+        newTargetCollections.add(developer);
+        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
         return developer;
     }
 
@@ -73,6 +73,12 @@ public class DeveloperRepository {
         }
         String in = new Gson().toJson(targetCollection);
         FileUtils.writeToFile(in, fileName);
+    }
+
+    public Stream<Developer> collectionToStream(List<Developer> collection) {
+        return Optional.ofNullable(collection)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty);
     }
 
 }

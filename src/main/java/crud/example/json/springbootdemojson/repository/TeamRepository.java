@@ -4,10 +4,8 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Team;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class TeamRepository {
 
@@ -31,15 +29,17 @@ public class TeamRepository {
         Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
         List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
-        Team maxById = targetCollection
-                .stream()
+        Team maxById = collectionToStream(targetCollection)
                 .max(Comparator.comparing(Team::getId))
                 .orElse(null);
 
-        Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
+        Long maxId = Objects.nonNull(maxById) ?maxById.getId() : 0L;
         team.setId(maxId+1);
-        targetCollection.add(team);
-        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
+
+        List<Team> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));;
+        newTargetCollections.add(team);
+        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
+
         return team;
     }
 
@@ -67,5 +67,11 @@ public class TeamRepository {
         }
         String in = new Gson().toJson(targetCollection);
         FileUtils.writeToFile(in, fileName);
+    }
+
+    public Stream<Team> collectionToStream(List<Team> collection) {
+        return Optional.ofNullable(collection)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty);
     }
 }

@@ -1,1 +1,1 @@
-null
+[{"id":1,"name":"wings","developers":[{"id":1,"firstName":"Misha","lastName":"Vazovskiy","skills":[{"id":1,"name":"java"},{"id":2,"name":"php"},{"id":4,"name":"js"}]}],"teamStatus":"ACTIVE"},{"id":2,"name":"GNU","developers":[{"id":2,"firstName":"Nina","lastName":"McGonagal","skills":[{"id":3,"name":"sql"}]}],"teamStatus":"ACTIVE"}]
