@@ -31,8 +31,8 @@ public class TeamView {
     public static void startTeam() throws Exception {
         boolean exit = false;
         System.out.println(teamMenu);
-        String userInput = sc.next();
         do {
+            String userInput = sc.nextLine();
             switch (userInput) {
                 case "1":
                     save();
@@ -81,8 +81,8 @@ public class TeamView {
 
     private static void save() {
         System.out.println("Team name:");
+        String teamName = sc.nextLine();
         try{
-            String teamName = sc.nextLine();
             List<Developer> newDs = new ArrayList<>();
             boolean exit = false;
             Long devId;

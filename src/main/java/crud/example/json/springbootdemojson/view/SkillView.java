@@ -27,8 +27,8 @@ public class SkillView {
     public static void startSkill() throws Exception {
         boolean exit = false;
         System.out.println(skillMenu);
-        String userInput = sc.nextLine();
         do {
+            String userInput = sc.nextLine();
             switch (userInput) {
                 case "1":
                     save();

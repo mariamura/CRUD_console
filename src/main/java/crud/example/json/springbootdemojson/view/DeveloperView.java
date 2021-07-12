@@ -28,8 +28,8 @@ public class DeveloperView {
 
     public static void startDev() throws Exception {
         boolean exit = false;
+        System.out.println(devMenu);
         do {
-            System.out.println(devMenu);
             String userInput = sc.nextLine();
             switch (userInput) {
                 case "1":
@@ -184,6 +184,7 @@ public class DeveloperView {
         try{
             Long id = sc.nextLong();
             System.out.println(developerController.getById(id));
+            startDev();
         }catch (Exception e) {
             System.out.println("Error while developer read: " + e);
         }
