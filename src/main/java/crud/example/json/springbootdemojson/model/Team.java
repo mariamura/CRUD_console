@@ -1,6 +1,7 @@
 package crud.example.json.springbootdemojson.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Team {
 
@@ -25,7 +26,7 @@ public class Team {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -33,7 +34,7 @@ public class Team {
     }
 
     public List<Developer> getDevelopers() {
-        return developers;
+        return this.developers;
     }
 
     public void setDevelopers(List<Developer> developers) {
@@ -41,7 +42,7 @@ public class Team {
     }
 
     public TeamStatus getTeamStatus() {
-        return teamStatus;
+        return this.teamStatus;
     }
 
     public void setTeamStatus(TeamStatus teamStatus) {

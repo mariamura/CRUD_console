@@ -1,6 +1,7 @@
 package crud.example.json.springbootdemojson.view;
 
 import crud.example.json.springbootdemojson.controller.TeamController;
+import crud.example.json.springbootdemojson.model.Team;
 import crud.example.json.springbootdemojson.model.TeamStatus;
 
 import java.sql.SQLOutput;
@@ -13,8 +14,8 @@ public class TeamStatusView {
 
     private static String teamStMenu =
             "================\n" +
-                    "1. Deleted Teams\n" +
-                    "2. Active Teams\n" +
+                    "1. Active Teams\n" +
+                    "2. Deleted Teams\n" +
                     "3. Main menu\n" +
                     "4. Exit\n" +
                     "================\n";
@@ -46,5 +47,10 @@ public class TeamStatusView {
         teamController.getAll().stream().
                 filter(n->n.getTeamStatus().equals(teamStatus)).
                 forEach(n-> System.out.println(n.getId() + ":" + n.getName()));
+        try {
+            startTeamSt();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
