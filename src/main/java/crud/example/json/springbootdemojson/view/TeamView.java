@@ -30,9 +30,9 @@ public class TeamView {
 
     public static void startTeam() throws Exception {
         boolean exit = false;
+        System.out.println(teamMenu);
+        String userInput = sc.next();
         do {
-            System.out.println(teamMenu);
-            String userInput = sc.nextLine();
             switch (userInput) {
                 case "1":
                     save();

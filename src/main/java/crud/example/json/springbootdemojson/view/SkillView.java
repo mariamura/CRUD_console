@@ -26,9 +26,9 @@ public class SkillView {
 
     public static void startSkill() throws Exception {
         boolean exit = false;
+        System.out.println(skillMenu);
+        String userInput = sc.nextLine();
         do {
-            System.out.println(skillMenu);
-            String userInput = sc.nextLine();
             switch (userInput) {
                 case "1":
                     save();
@@ -129,6 +129,7 @@ public class SkillView {
         Long id = sc.nextLong();
         try{
             System.out.println(skillController.getById(id));
+            startSkill();
         }catch (Exception e) {
             System.out.println("Error while Skill read: " + e);
         }
