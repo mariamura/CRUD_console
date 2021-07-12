@@ -21,7 +21,7 @@ public class FileUtils {
 
     public static void writeToFile(String in, String fileName) {
         readFile(fileName);
-        try(FileWriter fw = new FileWriter(getPath(fileName), true)) {
+        try(FileWriter fw = new FileWriter(getPath(fileName))) {
             fw.write(in);
         }catch (IOException e) {
             System.out.println("Error while writing to the file: " + e);

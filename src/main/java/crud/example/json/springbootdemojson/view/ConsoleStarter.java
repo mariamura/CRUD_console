@@ -17,7 +17,7 @@ public class ConsoleStarter {
             "5. Exit\n" +
             "================\n";
 
-    public static void start() {
+    public static void start() throws Exception {
         boolean exit = false;
         do {
             System.out.println(mainMenu);

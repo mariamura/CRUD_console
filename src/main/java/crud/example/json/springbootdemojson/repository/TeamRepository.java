@@ -3,10 +3,6 @@ package crud.example.json.springbootdemojson.repository;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Team;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,7 +38,8 @@ public class TeamRepository {
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         team.setId(maxId+1);
-        //FileUtils.writeToFile(new Gson().toJson(team), fileName);
+        targetCollection.add(team);
+        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
         return team;
     }
 
@@ -51,7 +48,6 @@ public class TeamRepository {
                 team.getId(),
                 team.getName(),
                 team.getDevelopers());
-
         deleteById(team.getId());
         save(teamNew);
         return teamNew;
