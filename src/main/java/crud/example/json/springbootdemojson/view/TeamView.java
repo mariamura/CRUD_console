@@ -4,6 +4,7 @@ import crud.example.json.springbootdemojson.controller.DeveloperController;
 import crud.example.json.springbootdemojson.controller.TeamController;
 import crud.example.json.springbootdemojson.model.Developer;
 import crud.example.json.springbootdemojson.model.Team;
+import crud.example.json.springbootdemojson.model.TeamStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,12 +73,13 @@ public class TeamView {
         try{
             String userInput = sc.nextLine();
             if(userInput.equals("m")) startTeam();
+            else throw new NumberFormatException("Incorrect input!");
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public static void save() {
+    private static void save() {
         System.out.println("Team name:");
         String teamName = sc.nextLine();
         List<Developer> newDs = new ArrayList<>();
@@ -108,8 +110,19 @@ public class TeamView {
             }
         }while (!exit);
 
+        TeamStatus teamStatus;
+        System.out.println("Team status:\n" +
+                "1. ACTIVE\n"+
+                "2. DELETED\n");
+        String answer = sc.next();
+        if(answer.equals("1")) teamStatus = TeamStatus.ACTIVE;
+        else if(answer.equals("2")) {
+            teamStatus = TeamStatus.DELETED;
+        }
+        else throw new NumberFormatException("Incorrect status!");
+
         try{
-            Team newTeam = new Team(1L, teamName, newDs);
+            Team newTeam = new Team(1L, teamName, newDs, teamStatus);
             teamController.save(newTeam);
             System.out.println("New team " + teamName + "with id: " + newTeam.getId() + " was created" );
             startTeam();
@@ -118,49 +131,56 @@ public class TeamView {
         }
     }
 
-    public static void update() throws Exception {
+    private static void update() throws Exception {
         System.out.println("Team id:");
         Long id = sc.nextLong();
         System.out.println("================\n"+
                             "1. update name\n"+
                             "2. update developers\n" +
-                            "3. exit\n" +
+                            "3. update status\n" +
+                            "4. exit\n" +
                            "================\n");
         Team team = teamController.getById(id);
         Long devId;
         String userIn = sc.next();
-        if(userIn.equals("1")) {
-            System.out.println("Enter new team name:");
-            String newName = sc.next();
-            team.setName(newName);
-            System.out.println(team.toString());
-            teamController.update(team);
-        }
+        switch (userIn) {
+            case "1" -> {
+                System.out.println("Enter new team name:");
+                String newName = sc.next();
+                team.setName(newName);
+                System.out.println(team.toString());
+                teamController.update(team);
+            }
+            case "2" -> {
+                List<Developer> newDs = team.getDevelopers();
+                System.out.println("Add developers (enter id):");
+                developerController.getAll().stream().forEach
+                        (n -> System.out.println(n.getId() + ": " + n.getFirstName() + " " + n.getLastName()));
+                devId = sc.nextLong();
+                Long finalDevId = devId;
+                if (newDs.stream().anyMatch(n -> n.getId().equals(finalDevId))) {
+                    System.out.println("Developer is already in team");
+                } else {
+                    newDs.add(developerController.getById(devId));
+                }
+            }
+            case "3" -> {
+                System.out.println("Team status\n:" +
+                        "1. ACTIVE\n"+
+                        "2. DELETED\n");
+                String answer = sc.next();
+                if(answer.equals("1")) team.setTeamStatus(TeamStatus.ACTIVE);
+                else if(answer.equals("2")) team.setTeamStatus(TeamStatus.DELETED);
+                else throw new NumberFormatException("Incorrect status!");
 
-        else if(userIn.equals("2")) {
-            List<Developer> newDs = team.getDevelopers();
-            System.out.println("Add developers (enter id):");
-            developerController.getAll().stream().forEach
-                    (n->System.out.println(n.getId() + ": " + n.getFirstName() + " " + n.getLastName()));
-            devId = sc.nextLong();
-            Long finalDevId = devId;
-            if(newDs.stream().anyMatch(n->n.getId().equals(finalDevId))) {
-                System.out.println("Developer is already in team");
             }
-            else {
-                newDs.add(developerController.getById(devId));
-            }
-        }
-        else if(userIn.equals("3")) {
-            startTeam();
-        }
-        else {
-            throw new Exception("Incorrect input!");
+            case "4" -> startTeam();
+            default -> throw new Exception("Incorrect input!");
         }
 
     }
 
-    public static void delete() {
+    private static void delete() {
         System.out.println("Team id:");
         Long id = sc.nextLong();
         try{
@@ -171,7 +191,7 @@ public class TeamView {
         }
     }
 
-    public static void read() {
+    private static void read() {
         System.out.println("Team id:");
         Long id = sc.nextLong();
         try{

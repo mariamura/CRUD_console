@@ -47,7 +47,8 @@ public class TeamRepository {
         Team teamNew = new Team(
                 team.getId(),
                 team.getName(),
-                team.getDevelopers());
+                team.getDevelopers(),
+                team.getTeamStatus());
         deleteById(team.getId());
         save(teamNew);
         return teamNew;
