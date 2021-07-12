@@ -43,6 +43,8 @@ public class DeveloperRepository {
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         developer.setId(maxId+1);
+        targetCollection.add(developer);
+        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
         return developer;
     }
 

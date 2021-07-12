@@ -1,6 +1,5 @@
 package crud.example.json.springbootdemojson.view;
 
-import crud.example.json.springbootdemojson.model.TeamStatus;
 
 import java.util.Scanner;
 

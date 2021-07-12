@@ -10,7 +10,6 @@ public class TeamController {
     TeamRepository teamRepository = new TeamRepository();
 
 
-
     public List<Team> getAll(){
         return teamRepository.getAll();
     }

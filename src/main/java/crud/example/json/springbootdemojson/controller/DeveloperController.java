@@ -2,7 +2,6 @@ package crud.example.json.springbootdemojson.controller;
 
 import crud.example.json.springbootdemojson.model.Developer;
 import crud.example.json.springbootdemojson.repository.DeveloperRepository;
-import crud.example.json.springbootdemojson.view.DeveloperView;
 
 import java.util.List;
 

@@ -81,123 +81,126 @@ public class TeamView {
 
     private static void save() {
         System.out.println("Team name:");
-        String teamName = sc.nextLine();
-        List<Developer> newDs = new ArrayList<>();
-        boolean exit = false;
-        Long devId;
-        do {
-            System.out.println("Add developers (y/n):");
-            if(sc.nextLine().equals("n")) {
-                exit = true;
-                break;
-            }
-            developerController.getAll().stream().forEach
-                    (n->System.out.println(n.getId() + ": " + n.getFirstName() + " " + n.getLastName()));
-            devId = sc.nextLong();
-            Long finalDevId = devId;
-            if(newDs.stream().anyMatch(n->n.getId().equals(finalDevId))) {
-                System.out.println("Developer is already in team");
-            }
-            else {
-                newDs.add(developerController.getById(devId));
-            }
-            System.out.println("Add more developers (y/n)");
-            String answer = sc.next();
-            if(answer.equals("y")) {
-            }
-            else{
-                exit = true;
-            }
-        }while (!exit);
-
-        TeamStatus teamStatus;
-        System.out.println("Team status:\n" +
-                "1. ACTIVE\n"+
-                "2. DELETED\n");
-        String answer = sc.next();
-        if(answer.equals("1")) teamStatus = TeamStatus.ACTIVE;
-        else if(answer.equals("2")) {
-            teamStatus = TeamStatus.DELETED;
-        }
-        else throw new NumberFormatException("Incorrect status!");
-
         try{
+            String teamName = sc.nextLine();
+            List<Developer> newDs = new ArrayList<>();
+            boolean exit = false;
+            Long devId;
+            do {
+                System.out.println("Add developers (y/n):");
+                if(sc.nextLine().equals("n")) {
+                    exit = true;
+                    break;
+                }
+                developerController.getAll().stream().forEach
+                        (n->System.out.println(n.getId() + ": " + n.getFirstName() + " " + n.getLastName()));
+                devId = sc.nextLong();
+                Long finalDevId = devId;
+                if(newDs.stream().anyMatch(n->n.getId().equals(finalDevId))) {
+                    System.out.println("Developer is already in team");
+                }
+                else {
+                    newDs.add(developerController.getById(devId));
+                }
+                System.out.println("Add more developers (y/n)");
+                String answer = sc.next();
+                if(answer.equals("y")) {
+                }
+                else{
+                    exit = true;
+                }
+            }while (!exit);
+
+            TeamStatus teamStatus;
+            System.out.println("Team status:\n" +
+                    "1. ACTIVE\n"+
+                    "2. DELETED\n");
+            String answer = sc.next();
+            switch (answer) {
+                case "1" -> teamStatus = TeamStatus.ACTIVE;
+                case "2" -> teamStatus = TeamStatus.DELETED;
+                default  -> throw new NumberFormatException("Incorrect status!");
+            }
             Team newTeam = new Team(1L, teamName, newDs, teamStatus);
             teamController.save(newTeam);
             System.out.println("New team " + teamName + "with id: " + newTeam.getId() + " was created" );
-            startTeam();
         }catch (Exception e){
             System.out.println("Error during new team creation: " + e);
         }
     }
 
-    private static void update() throws Exception {
+    private static void update() {
         System.out.println("Team id:");
-        Long id = sc.nextLong();
-        System.out.println("================\n"+
-                            "1. update name\n"+
-                            "2. update developers\n" +
-                            "3. update status\n" +
-                            "4. exit\n" +
-                           "================\n");
-        Team team = teamController.getById(id);
-        Long devId;
-        String userIn = sc.next();
-        switch (userIn) {
-            case "1" -> {
-                System.out.println("Enter new team name:");
-                String newName = sc.next();
-                team.setName(newName);
-                System.out.println(team.toString());
-                teamController.update(team);
-            }
-            case "2" -> {
-                List<Developer> newDs = team.getDevelopers();
-                System.out.println("Add developers (enter id):");
-                developerController.getAll().stream().forEach
-                        (n -> System.out.println(n.getId() + ": " + n.getFirstName() + " " + n.getLastName()));
-                devId = sc.nextLong();
-                Long finalDevId = devId;
-                if (newDs.stream().anyMatch(n -> n.getId().equals(finalDevId))) {
-                    System.out.println("Developer is already in team");
-                } else {
-                    newDs.add(developerController.getById(devId));
+        try {
+            Long id = sc.nextLong();
+            System.out.println("================\n" +
+                    "1. update name\n" +
+                    "2. update developers\n" +
+                    "3. update status\n" +
+                    "4. exit\n" +
+                    "================\n");
+            Team team = teamController.getById(id);
+            Long devId;
+            String userIn = sc.next();
+            switch (userIn) {
+                case "1" -> {
+                    System.out.println("Enter new team name:");
+                    String newName = sc.next();
+                    team.setName(newName);
+                    System.out.println(team.toString());
+                    teamController.update(team);
                 }
-            }
-            case "3" -> {
-                System.out.println("Team status\n:" +
-                        "1. ACTIVE\n"+
-                        "2. DELETED\n");
-                String answer = sc.next();
-                if(answer.equals("1")) team.setTeamStatus(TeamStatus.ACTIVE);
-                else if(answer.equals("2")) team.setTeamStatus(TeamStatus.DELETED);
-                else throw new NumberFormatException("Incorrect status!");
+                case "2" -> {
+                    List<Developer> newDs = team.getDevelopers();
+                    System.out.println("Add developers (enter id):");
+                    developerController.getAll().stream().forEach
+                            (n -> System.out.println(n.getId() + ": " + n.getFirstName() + " " + n.getLastName()));
+                    devId = sc.nextLong();
+                    Long finalDevId = devId;
+                    if (newDs.stream().anyMatch(n -> n.getId().equals(finalDevId))) {
+                        System.out.println("Developer is already in team.");
+                    } else {
+                        newDs.add(developerController.getById(devId));
+                    }
+                }
+                case "3" -> {
+                    System.out.println("Team status\n:" +
+                            "1. ACTIVE\n" +
+                            "2. DELETED\n");
+                    String answer = sc.next();
+                    if (answer.equals("1")) team.setTeamStatus(TeamStatus.ACTIVE);
+                    else if (answer.equals("2")) team.setTeamStatus(TeamStatus.DELETED);
+                    else throw new NumberFormatException("Incorrect status!");
 
+                }
+                case "4" -> startTeam();
+                default -> throw new Exception("Incorrect input!");
             }
-            case "4" -> startTeam();
-            default -> throw new Exception("Incorrect input!");
+            System.out.println("Team with id: " + id + " was updated.");
+        }catch (Exception e) {
+            System.out.println("Error while Team update: " + e);
         }
 
     }
 
     private static void delete() {
         System.out.println("Team id:");
-        Long id = sc.nextLong();
         try{
+            Long id = sc.nextLong();
             teamController.deleteById(id);
-            System.out.println("Team with id: " + id + " was deleted." );
+            System.out.println("Team with id: " + id + " was deleted.");
         }catch (Exception e) {
-            System.out.println("Error while Team delete");
+            System.out.println("Error while Team delete: " + e);
         }
     }
 
     private static void read() {
         System.out.println("Team id:");
-        Long id = sc.nextLong();
         try{
+            Long id = sc.nextLong();
             System.out.println(teamController.getById(id).toString());
         }catch (Exception e) {
-            System.out.println("Error while Team read");
+            System.out.println("Error while Team read: " + e);
         }
     }
 

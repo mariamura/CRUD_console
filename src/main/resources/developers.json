@@ -1,1 +1,1 @@
-[{"id":1,"firstName":"Misha","lastName":"Vazovskiy","skills":[{"id":1,"name":"java"},{"id":2,"name":"php"},{"id":4,"name":"js"}]},{"id":2,"firstName":"Nina","lastName":"McGonagal","skills":[{"id":3,"name":"sql"}]}]
+[{"id":1,"firstName":"Misha","lastName":"Vazovskiy","skills":[{"id":1,"name":"java"},{"id":2,"name":"php"},{"id":4,"name":"js"}]},{"id":2,"firstName":"Nina","lastName":"McGonagal","skills":[{"id":3,"name":"sql"}]},{"id":3,"firstName":"Liana","lastName":"Jakson","skills":[{"id":1,"name":"java"},{"id":4,"name":"js"}]}]

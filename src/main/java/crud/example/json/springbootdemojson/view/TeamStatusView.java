@@ -40,6 +40,7 @@ public class TeamStatusView {
             }
         } while (!exit);
     }
+
     private static void read(TeamStatus teamStatus) {
         teamController.getAll().stream().
                 filter(n->n.getTeamStatus().equals(teamStatus)).

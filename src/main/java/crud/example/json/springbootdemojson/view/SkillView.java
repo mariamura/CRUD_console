@@ -1,12 +1,9 @@
 package crud.example.json.springbootdemojson.view;
 
 import crud.example.json.springbootdemojson.controller.SkillController;
-import crud.example.json.springbootdemojson.controller.TeamController;
 import crud.example.json.springbootdemojson.model.Developer;
 import crud.example.json.springbootdemojson.model.Skill;
-import crud.example.json.springbootdemojson.model.Team;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,15 +14,17 @@ public class SkillView {
     private static String skillMenu =
             "================\n" +
                     "1. Create new Skill\n"+
-                    "2. Get Skill by id\n" +
-                    "3. Update Skill\n" +
-                    "4. Delete Skill by id\n" +
-                    "5. Exit\n" +
+                    "2. Get all Skills\n" +
+                    "3. Get Skill by id\n" +
+                    "4. Update Skill\n" +
+                    "5. Delete Skill by id\n" +
+                    "6. Main menu\n" +
+                    "7. Exit\n" +
                     "================\n";
 
     private static SkillController skillController = new SkillController();
 
-    public static void startSkill() {
+    public static void startSkill() throws Exception {
         boolean exit = false;
         do {
             System.out.println(skillMenu);
@@ -36,64 +35,102 @@ public class SkillView {
                     exit = true;
                     break;
                 case "2":
-                    read();
+                    readAll();
                     exit = true;
                     break;
                 case "3":
-                    update();
+                    read();
                     exit = true;
                     break;
                 case "4":
-                    delete();
+                    update();
                     exit = true;
                     break;
                 case "5":
+                    delete();
+                    exit = true;
+                    break;
+                case "6":
+                    ConsoleStarter.start();
+                case "7":
                     exit = true;
                     break;
             }
         } while (!exit);
     }
 
-    public static void save() {
+    private static void readAll() {
+        System.out.println("================\n");
+        skillController.getAll().
+                stream().forEach(n->System.out.println(n.getId() + ":" + n.getName()));
+        System.out.println("================\n");
+        System.out.println("'m' to main menu\n");
+        try{
+            String userInput = sc.nextLine();
+            if(userInput.equals("m")) startSkill();
+            else throw new NumberFormatException("Incorrect input!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private static void save() {
         System.out.println("Skill name:");
         String skillName = sc.nextLine();
-        System.out.println("Skill id:");
-        Long id = sc.nextLong();
         try{
-            Skill skill = new Skill(id, skillName);
+            Skill skill = new Skill(1L, skillName);
             skillController.save(skill);
+            System.out.println("Skill with id: " + skill.getId() + " was created.");
+            startSkill();
         }catch (Exception e){
             System.out.println("Error during new Skill creation: " + e);
         }
     }
 
-    public static void update() {
+    private static void update() {
+
+        System.out.println("Skill id:");
+        try{
+            Long id = sc.nextLong();
+            System.out.println("================\n"+
+                    "1. update name\n"+
+                    "2. exit\n" +
+                    "================\n");
+            Skill skill = skillController.getById(id);
+            String userIn = sc.next();
+            switch (userIn) {
+                case "1" -> {
+                    System.out.println("Enter new name:");
+                    String newName = sc.next();
+                    skill.setName(newName);
+                    skillController.update(skill);
+                }
+                case "2" -> startSkill();
+                default -> throw new Exception("Incorrect input!");
+            }
+        }catch (Exception e) {
+            System.out.println("Error while Skill update: " + e);
+        }
+    }
+
+    private static void delete() {
         System.out.println("Skill id:");
         Long id = sc.nextLong();
         try{
             skillController.deleteById(id);
+            System.out.println("Skill with id: " + id + " was deleted.");
         }catch (Exception e) {
-            System.out.println("Error while Skill delete");
+            System.out.println("Error while Skill delete: " + e);
         }
     }
 
-    public static void delete() {
+    private static void read() {
         System.out.println("Skill id:");
         Long id = sc.nextLong();
         try{
-            skillController.deleteById(id);
+            System.out.println(skillController.getById(id));
         }catch (Exception e) {
-            System.out.println("Error while Skill delete");
-        }
-    }
-
-    public static void read() {
-        System.out.println("Skill id:");
-        Long id = sc.nextLong();
-        try{
-            skillController.getById(id);
-        }catch (Exception e) {
-            System.out.println("Error while Skill read");
+            System.out.println("Error while Skill read: " + e);
         }
     }
 }

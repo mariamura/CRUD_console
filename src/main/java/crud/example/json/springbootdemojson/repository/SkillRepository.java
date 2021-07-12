@@ -40,6 +40,8 @@ public class SkillRepository {
 
         Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
         skill.setId(maxId+1);
+        targetCollection.add(skill);
+        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
         return skill;
     }
 
