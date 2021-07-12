@@ -3,6 +3,7 @@ package crud.example.json.springbootdemojson.view;
 import crud.example.json.springbootdemojson.controller.TeamController;
 import crud.example.json.springbootdemojson.model.TeamStatus;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class TeamStatusView {
@@ -41,7 +42,7 @@ public class TeamStatusView {
         } while (!exit);
     }
 
-    private static void read(TeamStatus teamStatus) {
+    private static void read(TeamStatus teamStatus)  {
         teamController.getAll().stream().
                 filter(n->n.getTeamStatus().equals(teamStatus)).
                 forEach(n-> System.out.println(n.getId() + ":" + n.getName()));
