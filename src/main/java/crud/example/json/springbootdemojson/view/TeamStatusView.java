@@ -1,24 +1,26 @@
 package crud.example.json.springbootdemojson.view;
 
 import crud.example.json.springbootdemojson.controller.TeamController;
+import crud.example.json.springbootdemojson.model.ConsoleMessage;
 import crud.example.json.springbootdemojson.model.Team;
 import crud.example.json.springbootdemojson.model.TeamStatus;
 
 import java.sql.SQLOutput;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class TeamStatusView {
 
-    private static Scanner sc = new Scanner(System.in);
-    private static TeamController teamController = new TeamController();
+    private static final Scanner sc = new Scanner(System.in);
+    private static final TeamController teamController = new TeamController();
 
-    private static String teamStMenu =
-            "================\n" +
+    private static final String teamStMenu =
+                    ConsoleMessage.LINE.getMessage() +
                     "1. Active Teams\n" +
                     "2. Deleted Teams\n" +
                     "3. Main menu\n" +
                     "4. Exit\n" +
-                    "================\n";
+                    ConsoleMessage.LINE.getMessage();
 
     public static void startTeamSt() throws Exception {
         boolean exit = false;

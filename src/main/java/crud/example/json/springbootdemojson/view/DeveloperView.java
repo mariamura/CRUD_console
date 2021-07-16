@@ -26,6 +26,14 @@ public class DeveloperView {
                     "7. Exit\n" +
                     ConsoleMessage.LINE.getMessage();
 
+    private static final String teamUpMenu =
+                    ConsoleMessage.LINE.getMessage() +
+                    "1. update first name\n"+
+                    "2. update last name\n" +
+                    "3. update skills\n" +
+                    "4. exit\n" +
+                    ConsoleMessage.LINE.getMessage();
+
     private static final DeveloperController developerController = new DeveloperController();
     private static final SkillController skillController = new SkillController();
 
@@ -79,9 +87,7 @@ public class DeveloperView {
                     exit = true;
                     break;
                 }
-                skillController.getAll().stream().forEach
-                        (n->System.out.println(n.getId() + ": " + n.getName()));
-
+                skillController.printAll();
                 skillId = sc.nextLong();
                 Long finalSkillId = skillId;
                 if(newSkills.stream().anyMatch(n->n.getId().equals(finalSkillId))) {
@@ -109,8 +115,7 @@ public class DeveloperView {
 
     private static void readAll() {
         System.out.println(ConsoleMessage.LINE.getMessage());
-        developerController.getAll().stream().
-                forEach(n-> System.out.println(n.getId()+ ": "+ n.getFirstName() + " " + n.getLastName()));
+        developerController.printAll();
         System.out.println(ConsoleMessage.LINE.getMessage());
         System.out.println(ConsoleMessage.BACK_TO_MENU.getMessage());
         try{
@@ -126,12 +131,7 @@ public class DeveloperView {
         System.out.println(ConsoleMessage.ENTER_ID.getMessage());
         try{
             Long id = sc.nextLong();
-            System.out.println(ConsoleMessage.LINE.getMessage() +
-                    "1. update first name\n"+
-                    "2. update last name\n" +
-                    "3. update skills\n" +
-                    "4. exit\n" +
-                    ConsoleMessage.LINE.getMessage());
+            System.out.println(teamUpMenu);
             Developer developer = developerController.getById(id);
             List<Skill> newSkills = developer.getSkills();
             Long skillId;
@@ -151,16 +151,14 @@ public class DeveloperView {
                 }
                 case "3" -> {
                     System.out.println(ConsoleMessage.ADD_SKILLS.getMessage());
-                    newSkills.stream().forEach
-                            (n -> System.out.println(n.getId() + ": " + n.getName()));
+                    skillController.printAll();
                     skillId = sc.nextLong();
                     Long finalSkillId = skillId;
-                    if ( skillController.getAll().stream().anyMatch(n -> n.getId().equals(finalSkillId))) {
+                    if (skillController.getAll().stream().anyMatch(n -> n.getId().equals(finalSkillId))) {
                         System.out.println(ConsoleMessage.DEV_WARNING.getMessage());
                     } else {
                         newSkills.add(skillController.getById(skillId));
                     }
-
                 }
                 case "4" -> startDev();
                 default -> throw new Exception(ConsoleMessage.ERROR.getMessage());

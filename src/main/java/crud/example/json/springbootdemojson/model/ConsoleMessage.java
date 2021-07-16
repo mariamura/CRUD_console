@@ -15,8 +15,7 @@ public enum ConsoleMessage {
     ENTER_LAST_NAME("Enter lastname:"),
     ENTER_ID("Enter id"),
     ADD_SKILLS("Add skills (y/n):"),
-    ADD_DEVELOPERS("Add developers (y/n):"),
-    TEAM_STATUS("Team status:");
+    ADD_DEVELOPERS("Add developers (y/n):");
 
     private final String message;
 

@@ -175,7 +175,6 @@ public class TeamView {
                     if (answer.equals("1")) team.setTeamStatus(TeamStatus.ACTIVE);
                     else if (answer.equals("2")) team.setTeamStatus(TeamStatus.DELETED);
                     else throw new NumberFormatException(ConsoleMessage.ERROR.getMessage());
-
                 }
                 case "4" -> startTeam();
                 default -> throw new Exception(ConsoleMessage.ERROR.getMessage());
