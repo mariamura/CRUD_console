@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class FileUtils {
 
+    private static final String path = "src\\main\\resources\\";
+
     public static String readFile(String fileName) {
         String fileContent = "";
         try(FileReader fr = new FileReader(getPath(fileName))){
@@ -29,7 +31,6 @@ public class FileUtils {
     }
 
     public static String getPath(String fileName) {
-        String path = "src\\main\\resources\\";
         File f = new File(path + "\\" + fileName);
         return f.getAbsolutePath();
     }

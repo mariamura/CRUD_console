@@ -1,33 +1,36 @@
 package crud.example.json.springbootdemojson.controller;
 
 import crud.example.json.springbootdemojson.model.Team;
-import crud.example.json.springbootdemojson.repository.TeamRepository;
-
+import crud.example.json.springbootdemojson.repository.jsImpl.JsonTeamRepositoryImpl;
 import java.util.List;
 
 public class TeamController {
 
-    TeamRepository teamRepository = new TeamRepository();
-
+    JsonTeamRepositoryImpl jsonTeamRepository;
 
     public List<Team> getAll(){
-        return teamRepository.getAll();
+        return jsonTeamRepository.getAll();
     }
 
     public Team getById(Long id){
-        return teamRepository.getById(id);
+        return jsonTeamRepository.getById(id);
     }
 
     public void save(Team team){
-        teamRepository.save(team);
+        jsonTeamRepository.save(team);
     }
 
     public void update(Team team){
-        teamRepository.update(team);
+        jsonTeamRepository.update(team);
     }
 
     public void deleteById(Long id){
-        teamRepository.deleteById(id);
+        jsonTeamRepository.deleteById(id);
+    }
+
+    public void printAll() {
+        jsonTeamRepository.getAll().stream().
+                forEach(n -> System.out.println(n.getId() + ": " + n.getName()));
     }
 
 }

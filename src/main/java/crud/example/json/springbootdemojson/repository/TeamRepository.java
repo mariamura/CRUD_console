@@ -1,77 +1,19 @@
 package crud.example.json.springbootdemojson.repository;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Team;
-import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Stream;
 
-public class TeamRepository {
+public interface TeamRepository extends GenericRepository<Team, Long> {
 
-    public static final String fileName = "teams.json";
+    Team save(Team team);
 
-    public Team getById(Long id) {
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
-        return targetCollection
-                .stream()
-                .filter(n -> n.getId().equals(id))
-                .findFirst().orElse(null);
-    }
+    Team getById(Long id);
 
-    public List<Team> getAll() {
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        return new Gson().<ArrayList<Team>>fromJson(FileUtils.readFile(fileName), targetClassType);
-    }
+    void deleteById(Long id);
 
-    public Team save(Team team) {
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+    List<Team> getAll();
 
-        Team maxById = collectionToStream(targetCollection)
-                .max(Comparator.comparing(Team::getId))
-                .orElse(null);
+    Team update(Team team);
 
-        Long maxId = Objects.nonNull(maxById) ?maxById.getId() : 0L;
-        team.setId(maxId+1);
-
-        List<Team> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));;
-        newTargetCollections.add(team);
-        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
-
-        return team;
-    }
-
-    public Team update(Team team) {
-        Team teamNew = new Team(
-                team.getId(),
-                team.getName(),
-                team.getDevelopers(),
-                team.getTeamStatus());
-        deleteById(team.getId());
-        save(teamNew);
-        return teamNew;
-    }
-
-    public void deleteById(Long id)  {
-
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
-
-        for(Team team: targetCollection) {
-            if(team.getId().equals(id)){
-                targetCollection.remove(team);
-                break;
-            }
-        }
-        String in = new Gson().toJson(targetCollection);
-        FileUtils.writeToFile(in, fileName);
-    }
-
-    public Stream<Team> collectionToStream(List<Team> collection) {
-        return Optional.ofNullable(collection)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty);
-    }
+    Long getLastId();
 }

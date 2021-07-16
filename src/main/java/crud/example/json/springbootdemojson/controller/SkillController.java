@@ -1,31 +1,36 @@
 package crud.example.json.springbootdemojson.controller;
 
-
 import crud.example.json.springbootdemojson.model.Skill;
-import crud.example.json.springbootdemojson.repository.SkillRepository;
+import crud.example.json.springbootdemojson.repository.jsImpl.JsonSkillRepositoryImpl;
 
 import java.util.List;
 
 public class SkillController {
-    SkillRepository skillRepository = new SkillRepository();
+
+    JsonSkillRepositoryImpl jsonSkillRepository = new JsonSkillRepositoryImpl();
 
     public List<Skill> getAll(){
-        return skillRepository.getAll();
+        return jsonSkillRepository.getAll();
     }
 
     public Skill getById(Long id){
-        return skillRepository.getById(id);
+        return jsonSkillRepository.getById(id);
     }
 
     public void save(Skill skill){
-        skillRepository.save(skill);
+        jsonSkillRepository.save(skill);
     }
 
     public void update(Skill skill){
-        skillRepository.update(skill);
+        jsonSkillRepository.update(skill);
     }
 
     public void deleteById(Long id){
-        skillRepository.deleteById(id);
+        jsonSkillRepository.deleteById(id);
+    }
+
+    public void printAll() {
+        jsonSkillRepository.getAll().stream().
+                forEach(n -> System.out.println(n.getId() + ": " + n.getName()));
     }
 }
