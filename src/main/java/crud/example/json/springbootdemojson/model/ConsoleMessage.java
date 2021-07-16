@@ -26,5 +26,4 @@ public enum ConsoleMessage {
     public String getMessage() {
         return this.message;
     }
-
 }
