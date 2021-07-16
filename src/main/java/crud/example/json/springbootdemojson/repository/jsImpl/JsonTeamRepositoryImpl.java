@@ -3,7 +3,7 @@ package crud.example.json.springbootdemojson.repository.jsImpl;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Team;
-import crud.example.json.springbootdemojson.repository.FileUtils;
+import crud.example.json.springbootdemojson.utils.FileUtils;
 import crud.example.json.springbootdemojson.repository.TeamRepository;
 
 import java.lang.reflect.Type;
@@ -47,14 +47,6 @@ public class JsonTeamRepositoryImpl implements TeamRepository {
         return team;
     }
 
-    //
-    public Stream<Team> collectionToStream(List<Team> collection) {
-        return Optional.ofNullable(collection)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty);
-    }
-    //
-
     public Team update(Team team) {
         Team teamNew = new Team(
                 team.getId(),
@@ -82,6 +74,14 @@ public class JsonTeamRepositoryImpl implements TeamRepository {
     }
 
     public Long getLastId(){
-        return 1L;
+        return null;
     }
+
+    //
+    public Stream<Team> collectionToStream(List<Team> collection) {
+        return Optional.ofNullable(collection)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty);
+    }
+    //
 }

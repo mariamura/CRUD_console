@@ -1,19 +1,7 @@
 package crud.example.json.springbootdemojson;
 
-import com.google.gson.Gson;
-import crud.example.json.springbootdemojson.model.Developer;
-import crud.example.json.springbootdemojson.model.Skill;
-import crud.example.json.springbootdemojson.model.Team;
-import crud.example.json.springbootdemojson.repository.DeveloperRepository;
-import crud.example.json.springbootdemojson.repository.FileUtils;
-import crud.example.json.springbootdemojson.repository.SkillRepository;
-import crud.example.json.springbootdemojson.repository.TeamRepository;
 import crud.example.json.springbootdemojson.view.ConsoleStarter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 
 @SpringBootApplication
 public class StartProgram {

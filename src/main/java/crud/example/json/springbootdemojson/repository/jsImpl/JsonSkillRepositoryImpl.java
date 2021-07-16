@@ -3,7 +3,7 @@ package crud.example.json.springbootdemojson.repository.jsImpl;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Skill;
-import crud.example.json.springbootdemojson.repository.FileUtils;
+import crud.example.json.springbootdemojson.utils.FileUtils;
 import crud.example.json.springbootdemojson.repository.SkillRepository;
 
 import java.lang.reflect.Type;
@@ -67,6 +67,10 @@ public class JsonSkillRepositoryImpl implements SkillRepository {
         FileUtils.writeToFile(in, fileName);
     }
 
+    public Long getLastId() {
+        return null;
+    }
+
     //
     public Stream<Skill> collectionToStream(List<Skill> collection) {
         return Optional.ofNullable(collection)
@@ -74,8 +78,4 @@ public class JsonSkillRepositoryImpl implements SkillRepository {
                 .orElseGet(Stream::empty);
     }
     //
-
-    public Long getLastId() {
-        return 1L;
-    }
 }

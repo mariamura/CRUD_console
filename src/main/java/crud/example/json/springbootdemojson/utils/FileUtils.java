@@ -1,4 +1,4 @@
-package crud.example.json.springbootdemojson.repository;
+package crud.example.json.springbootdemojson.utils;
 
 import java.io.File;
 import java.io.FileReader;

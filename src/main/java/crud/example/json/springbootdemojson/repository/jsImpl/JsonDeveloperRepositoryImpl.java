@@ -4,7 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import crud.example.json.springbootdemojson.model.Developer;
 import crud.example.json.springbootdemojson.repository.DeveloperRepository;
-import crud.example.json.springbootdemojson.repository.FileUtils;
+import crud.example.json.springbootdemojson.utils.FileUtils;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -57,10 +57,6 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
         return developerNew;
     }
 
-    public Long getLastId() {
-        return null;
-    }
-
     public void deleteById(Long id)  {
 
         Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
@@ -74,6 +70,10 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
         }
         String in = new Gson().toJson(targetCollection);
         FileUtils.writeToFile(in, fileName);
+    }
+
+    public Long getLastId() {
+        return null;
     }
 
     //
