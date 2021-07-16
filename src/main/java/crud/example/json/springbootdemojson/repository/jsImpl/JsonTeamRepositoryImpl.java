@@ -16,8 +16,7 @@ public class JsonTeamRepositoryImpl implements TeamRepository {
     public static final String fileName = "teams.json";
 
     public Team getById(Long id) {
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+        List<Team> targetCollection = getAll();
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -56,18 +55,18 @@ public class JsonTeamRepositoryImpl implements TeamRepository {
     }
 
     public void deleteById(Long id)  {
+        List<Team> targetCollection = getAll();
 
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
-
-        for(Team team: targetCollection) {
-            if(team.getId().equals(id)){
-                targetCollection.remove(team);
-                break;
+        if(targetCollection.stream().anyMatch(n->n.getId().equals(id))){
+            for(Team team: targetCollection) {
+                if(team.getId().equals(id)) {
+                    targetCollection.remove(team);
+                    break;
+                }
             }
-        }
-        String in = new Gson().toJson(targetCollection);
-        FileUtils.writeToFile(in, fileName);
+            String in = new Gson().toJson(targetCollection);
+            FileUtils.writeToFile(in, fileName);
+        } else throw new NoSuchElementException();
     }
 
     public Long getLastId(){

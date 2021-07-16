@@ -16,8 +16,7 @@ public class JsonSkillRepositoryImpl implements SkillRepository {
     public static final String fileName = "skills.json";
 
     public Skill getById(Long id) {
-        Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+        List<Skill> targetCollection = getAll();
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -51,18 +50,18 @@ public class JsonSkillRepositoryImpl implements SkillRepository {
     }
 
     public void deleteById(Long id)  {
+        List<Skill> targetCollection = getAll();
 
-        Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
-
-        for(Skill skill: targetCollection) {
-            if(skill.getId().equals(id)){
-                targetCollection.remove(skill);
-                break;
+        if(targetCollection.stream().anyMatch(n->n.getId().equals(id))) {
+            for (Skill skill : targetCollection) {
+                if (skill.getId().equals(id)) {
+                    targetCollection.remove(skill);
+                    break;
+                }
             }
-        }
-        String in = new Gson().toJson(targetCollection);
-        FileUtils.writeToFile(in, fileName);
+            String in = new Gson().toJson(targetCollection);
+            FileUtils.writeToFile(in, fileName);
+        } else throw new NullPointerException();
     }
 
     public Long getLastId() {

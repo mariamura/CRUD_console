@@ -55,18 +55,18 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     public void deleteById(Long id)  {
+        List<Developer> targetCollection = getAll();
 
-        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
-
-        for(Developer developer: targetCollection) {
-            if(developer.getId().equals(id)){
-                targetCollection.remove(developer);
-                break;
+        if(targetCollection.stream().anyMatch(n->n.getId().equals(id))) {
+            for(Developer developer : targetCollection) {
+                if(developer.getId().equals(id)) {
+                    targetCollection.remove(developer);
+                    break;
+                }
             }
-        }
-        String in = new Gson().toJson(targetCollection);
-        FileUtils.writeToFile(in, fileName);
+            String in = new Gson().toJson(targetCollection);
+            FileUtils.writeToFile(in, fileName);
+        } else throw new RuntimeException();
     }
 
     public Long getLastId() {
