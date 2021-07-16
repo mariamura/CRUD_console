@@ -121,6 +121,7 @@ public class SkillView {
         try{
             skillController.deleteById(id);
             System.out.println(ConsoleMessage.DELETED.getMessage() + id);
+            startSkill();
         }catch (Exception e) {
             System.out.println("Error while skill delete: " + e);
         }

@@ -2,6 +2,7 @@ package crud.example.json.springbootdemojson.repository.jsImpl;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import crud.example.json.springbootdemojson.model.Developer;
 import crud.example.json.springbootdemojson.model.Skill;
 import crud.example.json.springbootdemojson.utils.FileUtils;
 import crud.example.json.springbootdemojson.repository.SkillRepository;
@@ -29,19 +30,16 @@ public class JsonSkillRepositoryImpl implements SkillRepository {
     }
 
     public Skill save(Skill skill) {
-        Type targetClassType = new TypeToken<ArrayList<Skill>>() { }.getType();
-        List<Skill> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+        List<Skill> targetCollection = getAll();
+        skill.setId(getLastId()+1);
 
-        Skill maxById = collectionToStream(targetCollection)
-                .max(Comparator.comparing(Skill::getId))
-                .orElse(null);
+        if(targetCollection==null) {
+            targetCollection = new ArrayList<>();
+            targetCollection.add(skill);
+        }
+        else targetCollection.add(skill);
 
-        Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
-        skill.setId(maxId+1);
-
-        List<Skill> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));
-        newTargetCollections.add(skill);
-        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
+        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
         return skill;
     }
 
@@ -68,14 +66,14 @@ public class JsonSkillRepositoryImpl implements SkillRepository {
     }
 
     public Long getLastId() {
-        return null;
+        List<Skill> targetCollection = getAll();
+        if(targetCollection==null || targetCollection.isEmpty()) {
+            return 0L;
+        } else {
+            Skill maxById = targetCollection.stream()
+                    .max(Comparator.comparing(Skill::getId)).orElse(null);
+            return maxById.getId();
+        }
     }
 
-    //
-    public Stream<Skill> collectionToStream(List<Skill> collection) {
-        return Optional.ofNullable(collection)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty);
-    }
-    //
 }

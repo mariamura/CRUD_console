@@ -175,6 +175,7 @@ public class DeveloperView {
             Long id = sc.nextLong();
             developerController.deleteById(id);
             System.out.println(ConsoleMessage.DELETED.getMessage() + id);
+            startDev();
         }catch (Exception e) {
             System.out.println("Error while developer delete: " + e);
         }

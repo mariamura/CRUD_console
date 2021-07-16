@@ -1,12 +1,13 @@
 package crud.example.json.springbootdemojson.controller;
 
 import crud.example.json.springbootdemojson.model.Team;
+import crud.example.json.springbootdemojson.repository.TeamRepository;
 import crud.example.json.springbootdemojson.repository.jsImpl.JsonTeamRepositoryImpl;
 import java.util.List;
 
 public class TeamController {
 
-    JsonTeamRepositoryImpl jsonTeamRepository;
+    TeamRepository jsonTeamRepository = new JsonTeamRepositoryImpl();
 
     public List<Team> getAll(){
         return jsonTeamRepository.getAll();

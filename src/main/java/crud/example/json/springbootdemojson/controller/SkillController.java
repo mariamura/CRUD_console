@@ -1,13 +1,14 @@
 package crud.example.json.springbootdemojson.controller;
 
 import crud.example.json.springbootdemojson.model.Skill;
+import crud.example.json.springbootdemojson.repository.SkillRepository;
 import crud.example.json.springbootdemojson.repository.jsImpl.JsonSkillRepositoryImpl;
 
 import java.util.List;
 
 public class SkillController {
 
-    JsonSkillRepositoryImpl jsonSkillRepository = new JsonSkillRepositoryImpl();
+    SkillRepository jsonSkillRepository = new JsonSkillRepositoryImpl();
 
     public List<Skill> getAll(){
         return jsonSkillRepository.getAll();

@@ -2,6 +2,7 @@ package crud.example.json.springbootdemojson.repository.jsImpl;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import crud.example.json.springbootdemojson.model.Skill;
 import crud.example.json.springbootdemojson.model.Team;
 import crud.example.json.springbootdemojson.utils.FileUtils;
 import crud.example.json.springbootdemojson.repository.TeamRepository;
@@ -29,20 +30,16 @@ public class JsonTeamRepositoryImpl implements TeamRepository {
     }
 
     public Team save(Team team) {
-        Type targetClassType = new TypeToken<ArrayList<Team>>() { }.getType();
-        List<Team> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+        List<Team> targetCollection = getAll();
+        team.setId(getLastId()+1);
 
-        Team maxById = collectionToStream(targetCollection)
-                .max(Comparator.comparing(Team::getId))
-                .orElse(null);
+        if(targetCollection==null) {
+            targetCollection = new ArrayList<>();
+            targetCollection.add(team);
+        }
+        else targetCollection.add(team);
 
-        Long maxId = Objects.nonNull(maxById) ?maxById.getId() : 0L;
-        team.setId(maxId+1);
-
-
-        List<Team> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));;
-        newTargetCollections.add(team);
-        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
+        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
 
         return team;
     }
@@ -74,14 +71,13 @@ public class JsonTeamRepositoryImpl implements TeamRepository {
     }
 
     public Long getLastId(){
-        return null;
+        List<Team> targetCollection = getAll();
+        if(targetCollection==null || targetCollection.isEmpty()) {
+            return 0L;
+        } else {
+            Team maxById = targetCollection.stream()
+                    .max(Comparator.comparing(Team::getId)).orElse(null);
+            return maxById.getId();
+        }
     }
-
-    //
-    public Stream<Team> collectionToStream(List<Team> collection) {
-        return Optional.ofNullable(collection)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty);
-    }
-    //
 }

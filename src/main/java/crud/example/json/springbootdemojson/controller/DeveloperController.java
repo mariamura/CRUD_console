@@ -1,13 +1,14 @@
 package crud.example.json.springbootdemojson.controller;
 
 import crud.example.json.springbootdemojson.model.Developer;
+import crud.example.json.springbootdemojson.repository.DeveloperRepository;
 import crud.example.json.springbootdemojson.repository.jsImpl.JsonDeveloperRepositoryImpl;
 
 import java.util.List;
 
 public class DeveloperController {
 
-    JsonDeveloperRepositoryImpl jsonDeveloperRepository = new JsonDeveloperRepositoryImpl();
+    DeveloperRepository jsonDeveloperRepository = new JsonDeveloperRepositoryImpl();
 
     public List<Developer> getAll(){
         return jsonDeveloperRepository.getAll();

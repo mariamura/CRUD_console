@@ -15,8 +15,7 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     public static final String fileName = "developers.json";
 
     public Developer getById(Long id) {
-        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+        List<Developer> targetCollection = getAll();
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -29,19 +28,17 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     public Developer save(Developer developer) {
-        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
-        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
-        Developer maxById = collectionToStream(targetCollection)
-                .max(Comparator.comparing(Developer::getId))
-                .orElse(null);
+        List<Developer> targetCollection = getAll();
+        developer.setId(getLastId()+1);
 
-        Long maxId = Objects.nonNull(maxById) ? maxById.getId() : 0L;
-        developer.setId(maxId+1);
+        if(targetCollection==null) {
+            targetCollection = new ArrayList<>();
+            targetCollection.add(developer);
+        }
+        else targetCollection.add(developer);
 
-        List<Developer> newTargetCollections = new ArrayList<>(Optional.ofNullable(targetCollection).orElse(Collections.emptyList()));;
-        newTargetCollections.add(developer);
-        FileUtils.writeToFile(new Gson().toJson(newTargetCollections), fileName);
+        FileUtils.writeToFile(new Gson().toJson(targetCollection), fileName);
         return developer;
     }
 
@@ -73,14 +70,13 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     public Long getLastId() {
-        return null;
+        List<Developer> targetCollection = getAll();
+        if(targetCollection==null || targetCollection.isEmpty()) {
+            return 0L;
+        } else {
+            Developer maxById = targetCollection.stream()
+                    .max(Comparator.comparing(Developer::getId)).orElse(null);
+            return maxById.getId();
+        }
     }
-
-    //
-    public Stream<Developer> collectionToStream(List<Developer> collection) {
-        return Optional.ofNullable(collection)
-                .map(Collection::stream)
-                .orElseGet(Stream::empty);
-    }
-    //
 }
