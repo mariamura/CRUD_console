@@ -13,7 +13,4 @@ public interface GenericRepository<T, ID> {
     List<T> getAll();
 
     T update(T t);
-
-    ID getLastId();
-
 }

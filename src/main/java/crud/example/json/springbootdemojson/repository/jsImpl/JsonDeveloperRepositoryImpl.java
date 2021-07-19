@@ -15,7 +15,9 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     public static final String fileName = "developers.json";
 
     public Developer getById(Long id) {
-        List<Developer> targetCollection = getAll();
+        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
+
         return targetCollection
                 .stream()
                 .filter(n -> n.getId().equals(id))
@@ -28,8 +30,9 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     public Developer save(Developer developer) {
+        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
-        List<Developer> targetCollection = getAll();
         developer.setId(getLastId()+1);
 
         if(targetCollection==null) {
@@ -55,7 +58,8 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     public void deleteById(Long id)  {
-        List<Developer> targetCollection = getAll();
+        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
 
         if(targetCollection.stream().anyMatch(n->n.getId().equals(id))) {
             for(Developer developer : targetCollection) {
@@ -70,7 +74,8 @@ public class JsonDeveloperRepositoryImpl implements DeveloperRepository {
     }
 
     public Long getLastId() {
-        List<Developer> targetCollection = getAll();
+        Type targetClassType = new TypeToken<ArrayList<Developer>>() { }.getType();
+        List<Developer> targetCollection = new Gson().fromJson(FileUtils.readFile(fileName), targetClassType);
         if(targetCollection==null || targetCollection.isEmpty()) {
             return 0L;
         } else {
